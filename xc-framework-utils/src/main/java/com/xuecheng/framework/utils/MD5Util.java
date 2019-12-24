@@ -141,20 +141,20 @@ public class MD5Util {
      *
      * @param args the arguments
      */
-    public static void main(String[] args) {
-
-        long beginTime = System.currentTimeMillis();
-        File fileZIP = new File("D:\\BaiduNetdiskDownload\\test1.avi");
-
-        String md5 = "";
-        try {
-            md5 = getFileMD5String(fileZIP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        long endTime = System.currentTimeMillis();
-        System.out.println("MD5:" + md5 + "\n time:" + ((endTime - beginTime)) + "ms");
-
-        System.out.println(getStringMD5("111111"));
-    }
+//    public static void main(String[] args) {
+//
+//        long beginTime = System.currentTimeMillis();
+//        File fileZIP = new File("D:\\BaiduNetdiskDownload\\test1.avi");
+//
+//        String md5 = "";
+//        try {
+//            md5 = getFileMD5String(fileZIP);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        long endTime = System.currentTimeMillis();
+//        System.out.println("MD5:" + md5 + "\n time:" + ((endTime - beginTime)) + "ms");
+//
+//        System.out.println(getStringMD5("111111"));
+//    }
 }

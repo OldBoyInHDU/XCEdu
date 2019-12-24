@@ -236,16 +236,16 @@ public class Snowflake {
         return (-1L << lb) ^ (-1L << rb);
     }
 
-    public static void main(String[] args) {
-        Snowflake idWorker = new Snowflake(1, 2);
-        Snowflake idWorker2 = new Snowflake(1, 3);
-        for(int i=0;i<10;i++){
-            long l = idWorker.nextId();
-            long l2 = idWorker2.nextId();
-            System.out.println(l);
-            System.out.println(l2);
-        }
-
-    }
+//    public static void main(String[] args) {
+//        Snowflake idWorker = new Snowflake(1, 2);
+//        Snowflake idWorker2 = new Snowflake(1, 3);
+//        for(int i=0;i<10;i++){
+//            long l = idWorker.nextId();
+//            long l2 = idWorker2.nextId();
+//            System.out.println(l);
+//            System.out.println(l2);
+//        }
+//
+//    }
 }
 

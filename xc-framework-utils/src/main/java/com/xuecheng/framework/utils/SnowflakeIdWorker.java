@@ -139,13 +139,13 @@ public class SnowflakeIdWorker {
 
     //==============================Test=============================================
     /** 测试 */
-    public static void main(String[] args) {
-//        System.out.println(Long.toBinaryString(5));
-        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1);
-        for (int i = 0; i < 1000; i++) {
-            long id = idWorker.nextId();
-            System.out.println(Long.toBinaryString(id));
-            System.out.println(id);
-        }
-    }
+//    public static void main(String[] args) {
+////        System.out.println(Long.toBinaryString(5));
+//        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1);
+//        for (int i = 0; i < 1000; i++) {
+//            long id = idWorker.nextId();
+//            System.out.println(Long.toBinaryString(id));
+//            System.out.println(id);
+//        }
+//    }
 }
