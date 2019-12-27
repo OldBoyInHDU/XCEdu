@@ -38,8 +38,8 @@ public class PageServiceImpl implements IPageService {
         Page<CmsPage> pages = cmsPageRepository.findAll(pageable);
 
         QueryResult queryResult = new QueryResult();
-        queryResult.setList(pages.getContent());
-        queryResult.setTotal(pages.getTotalElements());
+        queryResult.setList(pages.getContent());//数据列表
+        queryResult.setTotal(pages.getTotalElements());//数据总记录数
         QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
         return queryResponseResult;
     }

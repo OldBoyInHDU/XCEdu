@@ -31,3 +31,13 @@
 4. 关于spring cloud中Feign导入依赖为unknow的情况
     * 原因：不详
         * 解决方法：把`spring-cloud-starter-feign`变为`spring-cloud-starter-openfeign`。via: https://blog.csdn.net/weixin_42740268/article/details/84822260
+    
+## 20191227
+1. 完成并测试了页面查询接口
+2. swagger注解的使用 
+    1. Swagger2Configuration
+        1. `@Api(value = "cms页面管理接口", description = "cms页面管理接口，提供页面的增删改查")`
+        2. `@ApiOperation("分页查询列表")`
+        3. `@ApiImplicitParams({})`
+        4. `@ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "path", dataType = "int")`
+        5. `@ApiModelProperty("站点ID")`
