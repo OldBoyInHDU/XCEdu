@@ -5,9 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -65,5 +63,28 @@ public class CmsPageRepositoryTest {
     public void testFindByPageName() {
         CmsPage page = cmsPageRepository.findByPageName("index.html");
         System.out.println(page);
+    }
+
+    @Test
+    public void testFindAllByExample() {
+        //分页
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+
+        //条件值对象
+        CmsPage condition = new CmsPage();
+        //要查询5a751fab6abb5044e0d19ea1站点的页面
+//        condition.setSiteId("5a751fab6abb5044e0d19ea1");
+        condition.setPageAliase("轮播");
+        //条件匹配器
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching();
+        exampleMatcher = exampleMatcher.withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
+        //定义Example
+        Example<CmsPage> example = Example.of(condition, exampleMatcher);
+
+        Page<CmsPage> pages = cmsPageRepository.findAll(example, pageable);
+        List<CmsPage> content = pages.getContent();
+        System.out.println(content);
     }
 }
