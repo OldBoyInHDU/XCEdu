@@ -22,4 +22,12 @@ public interface CmsPageControllerApi {
     //新增页面
     @ApiOperation("新增页面")
     public CmsPageResult add(CmsPage cmsPage);
+
+    //根据页面id查询页面信息
+    @ApiOperation("根据页面id查询页面信息")
+    public CmsPage findById(String id);
+
+    //修改页面
+    @ApiOperation("修改页面")
+    public CmsPageResult edit(String id, CmsPage cmsPage);
 }

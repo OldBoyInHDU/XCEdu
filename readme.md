@@ -1,5 +1,7 @@
-#学成在线微服务开发日志
-##20191222 基础工程搭建
+# 学成在线微服务开发日志
+
+## 20191222 基础工程搭建
+
 1. 项目导入
     1. parent：父工程
     2. common：通用组件
@@ -22,7 +24,7 @@
 1. 项目依赖飘红
     * 原因：由于从pdf中复制pom内容，其中短横`-`格式或编码不对，导致maven无法识别依赖
         * 解决方法：删除短横`-`，重新键盘输入即可
-        
+    
 2. springboot启动：找不到或无法加载主类
     * 原因：应该是没有正确install
         * 解决方法：clean，重新install后再启动
@@ -41,3 +43,63 @@
         3. `@ApiImplicitParams({})`
         4. `@ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "path", dataType = "int")`
         5. `@ApiModelProperty("站点ID")`
+
+## 20200106
+
+1. 完成页面自定义查询接口
+2. 完成添加页面的接口
+
+### 自定义条件匹配器
+
+```java
+    /**
+     * 页面查询方法
+     * @param page 传入的第1页，应该是数据库的第0条
+     * @param size
+     * @param queryPageRequest
+     * @return
+     */
+    @Override
+    public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest) {
+        if (queryPageRequest == null) {
+            queryPageRequest = new QueryPageRequest();
+        }
+
+        //自定义条件查询
+        //定义条件匹配器
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
+        exampleMatcher.withMatcher("pageName", ExampleMatcher.GenericPropertyMatchers.contains());
+        //条件值对象
+        CmsPage condition = new CmsPage();
+        //设置条件值_站点id_模板Id_页面别名
+        if (StringUtils.isNotEmpty(queryPageRequest.getSiteId())) {
+            condition.setSiteId(queryPageRequest.getSiteId());
+        }
+        if (StringUtils.isNotEmpty(queryPageRequest.getTemplateId())) {
+            condition.setTemplateId(queryPageRequest.getTemplateId());
+        }
+        if (StringUtils.isNotEmpty(queryPageRequest.getPageAliase())) {
+            condition.setPageAliase(queryPageRequest.getPageAliase());
+        }
+        //定义Example
+        Example<CmsPage> example = Example.of(condition, exampleMatcher);
+        //分页查询
+        if (page <= 0) {
+            page = 1;
+        }
+        page = page - 1;
+        if (size <= 0) {
+            size = 10;
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CmsPage> pages = cmsPageRepository.findAll(example, pageable);
+
+        QueryResult queryResult = new QueryResult();
+        queryResult.setList(pages.getContent());//数据列表
+        queryResult.setTotal(pages.getTotalElements());//数据总记录数
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+        return queryResponseResult;
+    }
+```
+

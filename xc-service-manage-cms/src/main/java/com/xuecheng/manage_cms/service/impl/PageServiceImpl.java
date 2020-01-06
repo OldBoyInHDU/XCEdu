@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class PageServiceImpl implements IPageService {
@@ -36,6 +38,7 @@ public class PageServiceImpl implements IPageService {
         //定义条件匹配器
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
+        exampleMatcher.withMatcher("pageName", ExampleMatcher.GenericPropertyMatchers.contains());
         //条件值对象
         CmsPage condition = new CmsPage();
         //设置条件值_站点id_模板Id_页面别名
@@ -49,7 +52,7 @@ public class PageServiceImpl implements IPageService {
             condition.setPageAliase(queryPageRequest.getPageAliase());
         }
         //定义Example
-        Example<CmsPage> example = Example.of(condition);
+        Example<CmsPage> example = Example.of(condition, exampleMatcher);
         //分页查询
         if (page <= 0) {
             page = 1;
@@ -80,6 +83,40 @@ public class PageServiceImpl implements IPageService {
             return new CmsPageResult(CommonCode.SUCCESS, save);
         }
         //添加失败
+        return new CmsPageResult(CommonCode.FAIL, null);
+    }
+
+    @Override
+    public CmsPage getById(String id) {
+        Optional<CmsPage> optional = cmsPageRepository.findById(id);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
+    }
+
+    @Override
+    public CmsPageResult update(String id, CmsPage cmsPage) {
+        //根据id查询页面信息
+        CmsPage cmsPage1 = this.getById(id);
+        if (cmsPage1 != null) {
+            //设置修改信息
+            cmsPage1.setTemplateId(cmsPage.getTemplateId());
+            cmsPage1.setSiteId(cmsPage.getSiteId());
+            cmsPage1.setPageAliase(cmsPage.getPageAliase());
+            cmsPage1.setPageName(cmsPage.getPageName());
+            cmsPage1.setPageWebPath(cmsPage.getPageWebPath());
+            cmsPage1.setPagePhysicalPath(cmsPage.getPagePhysicalPath());
+
+            //执行更新
+            CmsPage save = cmsPageRepository.save(cmsPage1);
+            if (save != null) {
+                CmsPageResult cmsPageResult = new CmsPageResult(CommonCode.SUCCESS, save);
+                return cmsPageResult;
+
+            }
+        }
+        //修改失败
         return new CmsPageResult(CommonCode.FAIL, null);
     }
 }
