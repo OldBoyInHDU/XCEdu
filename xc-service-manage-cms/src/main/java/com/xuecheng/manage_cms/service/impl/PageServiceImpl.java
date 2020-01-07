@@ -2,7 +2,9 @@ package com.xuecheng.manage_cms.service.impl;
 
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
+import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
@@ -72,7 +74,7 @@ public class PageServiceImpl implements IPageService {
         return queryResponseResult;
     }
 
-    @Override
+    /*@Override
     public CmsPageResult add(CmsPage cmsPage) {
         //校验 页面名称、站点id、页面webpath的唯一性
         //根据 页面名称、站点id、页面webpath 查cms_page集合，如果查到说明页面已经存在，查不到就继续添加
@@ -85,6 +87,31 @@ public class PageServiceImpl implements IPageService {
         }
         //添加失败
         return new CmsPageResult(CommonCode.FAIL, null);
+    }*/
+
+    /**
+     * 异常处理
+     * @param cmsPage
+     * @return
+     */
+    @Override
+    public CmsPageResult add(CmsPage cmsPage) {
+        if (cmsPage == null) {
+            //非法入参异常，指定异常信息的内容
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAISNULL);
+        }
+        CmsPage cmsPage1 = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(), cmsPage.getSiteId(), cmsPage.getPageWebPath());
+        if (cmsPage1 != null) {
+            //页面已存在，无法新增
+            ExceptionCast.cast(CmsCode.CMS_ADDPAGE_EXISTSNAME);
+        }
+
+        //调用dao新增页面
+        cmsPage.setPageId(null);//保证mongodb帮助我们设置id，清空自己设的id
+        CmsPage save = cmsPageRepository.save(cmsPage);
+        return new CmsPageResult(CommonCode.SUCCESS, save);
+
+
     }
 
     @Override
