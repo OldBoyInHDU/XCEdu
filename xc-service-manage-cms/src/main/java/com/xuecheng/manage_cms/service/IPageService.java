@@ -1,5 +1,6 @@
 package com.xuecheng.manage_cms.service;
 
+import com.xuecheng.framework.domain.cms.CmsConfig;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
@@ -20,6 +21,9 @@ public interface IPageService {
 
     //根据页面id删除页面
     public ResponseResult deleteById(String id);
+
+    //根据ID查询cmsConfig
+    public CmsConfig getConfigById(String id);
 
 
 }
