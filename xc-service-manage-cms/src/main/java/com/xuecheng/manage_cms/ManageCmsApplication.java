@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,4 +23,5 @@ public class ManageCmsApplication {
     public RestTemplate restTemplate() {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
     }
+
 }

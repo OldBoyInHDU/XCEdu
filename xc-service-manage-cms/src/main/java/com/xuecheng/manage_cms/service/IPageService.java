@@ -25,5 +25,8 @@ public interface IPageService {
     //根据ID查询cmsConfig
     public CmsConfig getConfigById(String id);
 
+    //根据pageId取模板，取数据，执行页面静态化
+    public String getPageHtml(String pageId);
+
 
 }

@@ -21,8 +21,7 @@ public class CmsPageRepositoryTest {
     @Autowired
     private CmsPageRepository cmsPageRepository;
 
-    @Autowired
-    private RestTemplate restTemplate;
+
 
     /**
      * 查找所有
@@ -94,10 +93,5 @@ public class CmsPageRepositoryTest {
         System.out.println(content);
     }
 
-    @Test
-    public void testRestTemplate() {
-        ResponseEntity<Map> forEntity = restTemplate.getForEntity("http://localhost:31001/cms/config/getModel/5a791725dd573c3574ee333f", Map.class);
-        Map body = forEntity.getBody();
-        System.out.println(body);
-    }
+
 }
