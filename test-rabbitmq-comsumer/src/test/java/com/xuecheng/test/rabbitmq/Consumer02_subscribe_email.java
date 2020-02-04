@@ -103,7 +103,7 @@ public class Consumer02_subscribe_email {
          *          false表示要通过编程实现回复
          * 3.callback 消费方法，当消费者接收到消息要执行的方法
          */
-        channel.basicConsume(QUEUE_INFORM_EMAIL, defaultConsumer);
+        channel.basicConsume(QUEUE_INFORM_EMAIL, true, defaultConsumer);
 
     }
 }
