@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
  * @create 2020/2/4
  * @description
  **/
-public class Produce02_publish {
+public class Producer02_publish {
 
     //队列
     private static final String QUEUE_INFORM_EMAIL = "queue_inform_email";
