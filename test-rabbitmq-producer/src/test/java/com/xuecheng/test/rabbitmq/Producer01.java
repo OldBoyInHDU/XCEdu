@@ -29,11 +29,12 @@ public class Producer01 {
 
 
         Connection connection = null;
+        Channel channel = null;
         try {
             //建立新连接
             connection = connectionFactory.newConnection();
             //创建会话通道，生产者和mq服务所有通信都在channel通道中完成
-            Channel channel = connection.createChannel();
+            channel = connection.createChannel();
             //声明队列：如果队列在mq中没有则要创建
             //参数：String queue, boolean durable, boolean exclusive, boolean autoDelete, Map<String, Object> arguments
             /**
@@ -64,6 +65,21 @@ public class Producer01 {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
+        } finally {
+            //先关闭通道
+            try {
+                channel.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+            //再关闭连接
+            try {
+                connection.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
