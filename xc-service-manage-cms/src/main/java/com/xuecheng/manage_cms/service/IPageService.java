@@ -28,5 +28,8 @@ public interface IPageService {
     //根据pageId取模板，取数据，执行页面静态化
     public String getPageHtml(String pageId);
 
+    //页面发布
+    public ResponseResult post(String pageId);
+
 
 }
