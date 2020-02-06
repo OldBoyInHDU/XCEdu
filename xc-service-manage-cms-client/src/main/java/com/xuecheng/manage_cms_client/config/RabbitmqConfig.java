@@ -42,13 +42,14 @@ public class RabbitmqConfig {
      */
     @Bean(QUEUE_CMS_POSTPAGE)
     public Queue getQueueCmsPostpage() {
-        Queue queue = new Queue(QUEUE_CMS_POSTPAGE);
+        Queue queue = new Queue(queue_cms_postpage_name);
         return queue;
     }
 
     /**
      * 绑定队列到交换机
      */
+    @Bean
     public Binding bindingQueueToExchange(@Qualifier(EX_ROUTING_CMS_POSTPAGE) Exchange exchange,
                                           @Qualifier(QUEUE_CMS_POSTPAGE) Queue queue) {
         return BindingBuilder.bind(queue).to(exchange).with(routingKey).noargs();

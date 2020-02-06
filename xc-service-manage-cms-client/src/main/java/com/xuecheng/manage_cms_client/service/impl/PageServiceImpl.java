@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import java.util.Optional;
  * @create 2020/2/5
  * @description
  **/
+@Service
 public class PageServiceImpl implements IPageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageServiceImpl.class);
 
@@ -61,6 +63,9 @@ public class PageServiceImpl implements IPageService {
         CmsSite cmsSite = this.findCmsSiteById(siteId);
         //得到站点的物理路径
         String sitePhysicalPath = cmsSite.getSitePhysicalPath();
+        if (sitePhysicalPath == null) {
+            sitePhysicalPath = "";
+        }
         //拼接得到页面的物理路径 站点路径+页面路径+页面名
         String pagePath = sitePhysicalPath + cmsPage.getPagePhysicalPath() + cmsPage.getPageName();
         //将html文件保存到服务器物理路径上
@@ -103,6 +108,7 @@ public class PageServiceImpl implements IPageService {
     }
 
     //根据页面id查询页面信息
+    @Override
     public CmsPage findCmsPageById(String pageId) {
         Optional<CmsPage> optional = cmsPageRepository.findById(pageId);
         if (optional.isPresent()) {
@@ -113,6 +119,7 @@ public class PageServiceImpl implements IPageService {
     }
 
     //根据站点id查询站点信息
+    @Override
     public CmsSite findCmsSiteById(String siteId) {
         Optional<CmsSite> optional = cmsSiteRepository.findById(siteId);
         if (optional.isPresent()) {
