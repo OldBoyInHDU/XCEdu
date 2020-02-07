@@ -63,9 +63,9 @@ public class PageServiceImpl implements IPageService {
         CmsSite cmsSite = this.findCmsSiteById(siteId);
         //得到站点的物理路径
         String sitePhysicalPath = cmsSite.getSitePhysicalPath();
-        if (sitePhysicalPath == null) {
-            sitePhysicalPath = "";
-        }
+//        if (sitePhysicalPath == null) {
+//            sitePhysicalPath = "";
+//        }
         //拼接得到页面的物理路径 站点路径+页面路径+页面名
         String pagePath = sitePhysicalPath + cmsPage.getPagePhysicalPath() + cmsPage.getPageName();
         //将html文件保存到服务器物理路径上
