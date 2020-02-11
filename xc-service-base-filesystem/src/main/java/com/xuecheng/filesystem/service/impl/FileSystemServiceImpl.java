@@ -47,6 +47,7 @@ public class FileSystemServiceImpl implements IFileSystemService {
            ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
        }
         String fileId = fdfsUpload(multipartFile);
+        System.out.println(fileId);//group1/M00/00/00/wKgAZ15CpomAWSmuAAKBN9Um430494.jpg
         if (StringUtils.isEmpty(fileId)) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_SERVERFAIL);
         }
