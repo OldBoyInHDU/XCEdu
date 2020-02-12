@@ -16,4 +16,7 @@ public interface ICourseService {
 
     //添加课程计划
     ResponseResult addTeachplan(Teachplan teachplan);
+
+    //添加课程图片
+    ResponseResult addCoursePic(String courseId, String pic);
 }
