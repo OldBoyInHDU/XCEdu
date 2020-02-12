@@ -110,6 +110,17 @@ public class CouseServiceImpl implements ICourseService {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
+    //查询课程图片
+    @Override
+    public CoursePic findCoursePic(String courseId) {
+        Optional<CoursePic> picOptional = coursePicRepository.findById(courseId);
+        if (picOptional.isPresent()) {
+            CoursePic coursePic = picOptional.get();
+            return coursePic;
+        }
+        return null;
+    }
+
     //查询课程的根节点，如果查询不到， 要自动添加根节点
     private String getTeachplanRoot(String courseId) {
         //根据 课程id 查到 根课程信息

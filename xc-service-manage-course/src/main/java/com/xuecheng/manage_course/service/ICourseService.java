@@ -1,5 +1,6 @@
 package com.xuecheng.manage_course.service;
 
+import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.model.response.ResponseResult;
@@ -19,4 +20,7 @@ public interface ICourseService {
 
     //添加课程图片
     ResponseResult addCoursePic(String courseId, String pic);
+
+    //查询课程图片
+    CoursePic findCoursePic(String courseId);
 }
