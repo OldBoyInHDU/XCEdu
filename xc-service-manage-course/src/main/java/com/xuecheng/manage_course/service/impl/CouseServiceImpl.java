@@ -121,6 +121,19 @@ public class CouseServiceImpl implements ICourseService {
         return null;
     }
 
+    //删除课程图片
+    @Override
+    @Transactional
+    public ResponseResult deleteCoursePic(String courseId) {
+        //执行删除
+        long result = coursePicRepository.deleteByCourseid(courseId);
+        System.out.println(result);
+        if (result > 0) {
+            return new ResponseResult(CommonCode.SUCCESS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
+    }
+
     //查询课程的根节点，如果查询不到， 要自动添加根节点
     private String getTeachplanRoot(String courseId) {
         //根据 课程id 查到 根课程信息

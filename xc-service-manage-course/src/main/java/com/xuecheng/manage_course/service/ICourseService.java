@@ -23,4 +23,7 @@ public interface ICourseService {
 
     //查询课程图片
     CoursePic findCoursePic(String courseId);
+
+    //删除课程图片
+    ResponseResult deleteCoursePic(String courseId);
 }
