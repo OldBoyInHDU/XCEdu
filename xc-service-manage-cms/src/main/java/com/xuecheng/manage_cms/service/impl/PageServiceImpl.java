@@ -262,6 +262,18 @@ public class PageServiceImpl implements IPageService {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
+    //保存页面，有则更新，没有则添加
+    @Override
+    public CmsPageResult save(CmsPage cmsPage) {
+        //判断页面是否存在
+        CmsPage cmsPage1 = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(), cmsPage.getSiteId(), cmsPage.getPageWebPath());
+        if (cmsPage1 != null) {
+            //进行更新
+            return this.update(cmsPage.getPageId(), cmsPage);
+        }
+        return this.add(cmsPage);
+    }
+
     //向mq发送消息
     public void sendPostPage(String pageId) {
         //先得到页面信息 为获取routingKey（站点id）

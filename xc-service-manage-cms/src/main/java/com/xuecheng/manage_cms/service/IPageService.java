@@ -31,5 +31,6 @@ public interface IPageService {
     //页面发布
     public ResponseResult post(String pageId);
 
-
+    //保存页面
+    CmsPageResult save(CmsPage cmsPage);
 }
