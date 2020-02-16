@@ -4,6 +4,7 @@ import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
+import com.xuecheng.framework.domain.course.response.CoursePublishResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 
 /**
@@ -30,4 +31,7 @@ public interface ICourseService {
 
     //查询课程视图
     CourseView getCourseView(String id);
+
+    //课程预览
+    CoursePublishResult preview(String id);
 }
