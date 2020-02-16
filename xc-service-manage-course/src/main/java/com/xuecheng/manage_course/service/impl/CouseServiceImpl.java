@@ -1,16 +1,15 @@
 package com.xuecheng.manage_course.service.impl;
 
 import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.manage_course.dao.CourseBaseRepository;
-import com.xuecheng.manage_course.dao.CoursePicRepository;
-import com.xuecheng.manage_course.dao.TeachplanMapper;
-import com.xuecheng.manage_course.dao.TeachplanRepository;
+import com.xuecheng.manage_course.dao.*;
 import com.xuecheng.manage_course.service.ICourseService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +39,9 @@ public class CouseServiceImpl implements ICourseService {
 
     @Autowired
     private CoursePicRepository coursePicRepository;
+
+    @Autowired
+    private CourseMarketRepository courseMarketRepository;
 
     //课程计划的查询
     @Override
@@ -132,6 +134,35 @@ public class CouseServiceImpl implements ICourseService {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
+    }
+
+    //查询课程视图，包括基本信息、图片、营销信息、课程计划
+    @Override
+    public CourseView getCourseView(String id) {
+        CourseView courseView = new CourseView();
+        //查询课程基本信息
+        Optional<CourseBase> courseBaseOptional = courseBaseRepository.findById(id);
+        if (courseBaseOptional.isPresent()) {
+            CourseBase courseBase = courseBaseOptional.get();
+            courseView.setCourseBase(courseBase);
+        }
+        //查询课程图片
+        Optional<CoursePic> coursePicOptional = coursePicRepository.findById(id);
+        if (coursePicOptional.isPresent()) {
+            CoursePic coursePic = coursePicOptional.get();
+            courseView.setCoursePic(coursePic);
+        }
+        //查询课程营销
+        Optional<CourseMarket> courseMarketOptional = courseMarketRepository.findById(id);
+        if (courseMarketOptional.isPresent()) {
+            CourseMarket courseMarket = courseMarketOptional.get();
+            courseView.setCourseMarket(courseMarket);
+        }
+        //查询课程计划
+        TeachplanNode teachplanNode = teachplanMapper.selectList(id);
+        courseView.setTeachplanNode(teachplanNode);
+
+        return courseView;
     }
 
     //查询课程的根节点，如果查询不到， 要自动添加根节点
