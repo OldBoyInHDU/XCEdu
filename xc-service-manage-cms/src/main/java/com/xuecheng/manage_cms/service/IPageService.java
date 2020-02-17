@@ -4,6 +4,7 @@ import com.xuecheng.framework.domain.cms.CmsConfig;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,4 +34,7 @@ public interface IPageService {
 
     //保存页面
     CmsPageResult save(CmsPage cmsPage);
+
+    //一键发布
+    CmsPostPageResult postPageQuick(CmsPage cmsPage);
 }
