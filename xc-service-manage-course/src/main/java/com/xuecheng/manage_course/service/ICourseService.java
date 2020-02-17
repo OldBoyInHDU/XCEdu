@@ -34,4 +34,7 @@ public interface ICourseService {
 
     //课程预览
     CoursePublishResult preview(String id);
+
+    //课程发布
+    CoursePublishResult publish(String id);
 }

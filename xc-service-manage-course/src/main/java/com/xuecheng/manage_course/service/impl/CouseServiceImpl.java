@@ -2,6 +2,7 @@ package com.xuecheng.manage_course.service.impl;
 
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
@@ -219,6 +220,51 @@ public class CouseServiceImpl implements ICourseService {
         //返回CoursePublishResult对象（当中包含了页面预览的url）
         return new CoursePublishResult(CommonCode.SUCCESS,url);
     }
+
+    //课程发布
+    @Override
+    @Transactional //涉及mqsql事务提交
+    public CoursePublishResult publish(String id) {
+        //查询课程
+        CourseBase courseBase = this.findCourseBaseById(id);
+
+        //准备页面信息
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setSiteId(publish_siteId);//站点id
+        cmsPage.setDataUrl(publish_dataUrlPre + id);//数据模型url
+        cmsPage.setPageName(id + ".html");//页面名称
+        cmsPage.setPageAliase(courseBase.getName());//页面别名，课程名称
+        cmsPage.setPagePhysicalPath(publish_page_physicalPath);//页面物理路径
+        cmsPage.setPageWebPath(publish_page_webPath);//页面webpath
+        cmsPage.setTemplateId(publish_templateId);//页面模板id
+
+        //调用cms一键发布接口将课程详情页面发布到服务器
+        CmsPostPageResult cmsPostPageResult = cmsPageClient.postPageQuick(cmsPage);
+        if (!cmsPostPageResult.isSuccess()) {
+            return new CoursePublishResult(CommonCode.FAIL, null);
+        }
+        //保存课程的发布状态为“已发布”
+        CourseBase courseBaseState = this.saveCoursePubState(id);
+        if (courseBaseState == null) {
+            return new CoursePublishResult(CommonCode.FAIL, null);
+        }
+        //保存课程索引信息
+
+        //缓存课程信息
+
+        //得到页面的url
+        String pageUrl = cmsPostPageResult.getPageUrl();
+        return new CoursePublishResult(CommonCode.SUCCESS, pageUrl);
+    }
+
+    //更新课程状态为已发布 202002
+    private CourseBase saveCoursePubState(String courseId) {
+        CourseBase courseBase = this.findCourseBaseById(courseId);
+        courseBase.setStatus("202002");
+        courseBaseRepository.save(courseBase);
+        return courseBase;
+    }
+
 
     //根据id查询课程的基本信息
     public CourseBase findCourseBaseById(String courseId) {
