@@ -143,7 +143,7 @@ public class TestSearch {
         }
     }
 
-    //精确查询
+    //精确查询 不分词
     @Test
     public void testTermQuery() throws IOException, ParseException {
         //搜索请求对象
@@ -191,16 +191,16 @@ public class TestSearch {
         }
     }
 
-    //根据id精确查询
+    //根据id精确查询 不分词
     @Test
-    public void testIdsQuery() throws IOException, ParseException {
+    public void testTermsQueryByIds() throws IOException, ParseException {
         //搜索请求对象
         SearchRequest searchRequest = new SearchRequest("xc_course");
         //设置类型
         searchRequest.types("doc");
         //搜索源构建对象
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        //搜索方式——搜索全部
+        //搜索方式 termsQuery
         //主键
         String[] ids = new String[]{"1", "2"};
         searchSourceBuilder.query(QueryBuilders.termsQuery("_id", ids));
@@ -241,5 +241,54 @@ public class TestSearch {
         }
     }
 
+    //分词
+    @Test
+    public void testMatchQuery() throws IOException, ParseException {
+        //搜索请求对象
+        SearchRequest searchRequest = new SearchRequest("xc_course");
+        //设置类型
+        searchRequest.types("doc");
+        //搜索源构建对象
+        //搜索方式
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        //搜索方式——matchQuery
+        searchSourceBuilder.query(QueryBuilders.matchQuery("description", "spring开发框架").minimumShouldMatch("70%"));
+        //source源字段过滤
+        searchSourceBuilder.fetchSource(new String[] {"name", "studymodel", "price", "timestamp"}, new String[]{});
+//        int page = 1;
+//        int size = 1;
+//        //计算记录起始下标
+//        int from = (page - 1) * size;
+//        searchSourceBuilder.from(from);
+//        searchSourceBuilder.size(size);
+
+        //设置搜索源 装载搜索条件
+        searchRequest.source(searchSourceBuilder);
+        //执行搜索
+        SearchResponse searchResponse = client.search(searchRequest);
+        //搜索匹配结果
+        SearchHits hits = searchResponse.getHits();
+        //搜索总记录数
+        long totalHits = hits.totalHits;
+        //匹配度较高的前N个文档 不是总记录数
+        SearchHit[] searchHits = hits.getHits();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (SearchHit hit : searchHits) {
+            //文档主键
+            String id = hit.getId();
+            //原文档内同
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            //由于前边设置了源文档的过滤，这时description是取不到的
+            String description = (String) sourceAsMap.get("description");
+            //学习模式
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            //价格
+            Double price = (Double) sourceAsMap.get("price");
+            //时间
+            Date date = dateFormat.parse((String) sourceAsMap.get("timestamp"));
+        }
+    }
 
 }
