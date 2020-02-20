@@ -93,6 +93,153 @@ public class TestSearch {
             //时间
             Date date = dateFormat.parse((String) sourceAsMap.get("timestamp"));
         }
-
     }
+
+    //搜索分页查询
+    @Test
+    public void testSearchPage() throws IOException, ParseException {
+        //搜索请求对象
+        SearchRequest searchRequest = new SearchRequest("xc_course");
+        //设置类型
+        searchRequest.types("doc");
+        //搜索源构建对象
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //搜索方式——搜索全部
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        //source源字段过滤
+        searchSourceBuilder.fetchSource(new String[] {"name", "studymodel", "price", "timestamp"}, new String[]{});
+        int page = 1;
+        int size = 1;
+        //计算记录起始下标
+        int from = (page - 1) * size;
+        searchSourceBuilder.from(from);
+        searchSourceBuilder.size(size);
+
+        //设置搜索源 装载搜索条件
+        searchRequest.source(searchSourceBuilder);
+        //执行搜索
+        SearchResponse searchResponse = client.search(searchRequest);
+        //搜索匹配结果
+        SearchHits hits = searchResponse.getHits();
+        //搜索总记录数
+        long totalHits = hits.totalHits;
+        //匹配度较高的前N个文档 不是总记录数
+        SearchHit[] searchHits = hits.getHits();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (SearchHit hit : searchHits) {
+            //文档主键
+            String id = hit.getId();
+            //原文档内同
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            //由于前边设置了源文档的过滤，这时description是取不到的
+            String description = (String) sourceAsMap.get("description");
+            //学习模式
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            //价格
+            Double price = (Double) sourceAsMap.get("price");
+            //时间
+            Date date = dateFormat.parse((String) sourceAsMap.get("timestamp"));
+        }
+    }
+
+    //精确查询
+    @Test
+    public void testTermQuery() throws IOException, ParseException {
+        //搜索请求对象
+        SearchRequest searchRequest = new SearchRequest("xc_course");
+        //设置类型
+        searchRequest.types("doc");
+        //搜索源构建对象
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //搜索方式——搜索全部
+        searchSourceBuilder.query(QueryBuilders.termQuery("name", "spring"));
+        //source源字段过滤
+        searchSourceBuilder.fetchSource(new String[] {"name", "studymodel", "price", "timestamp"}, new String[]{});
+        int page = 1;
+        int size = 1;
+        //计算记录起始下标
+        int from = (page - 1) * size;
+        searchSourceBuilder.from(from);
+        searchSourceBuilder.size(size);
+
+        //设置搜索源 装载搜索条件
+        searchRequest.source(searchSourceBuilder);
+        //执行搜索
+        SearchResponse searchResponse = client.search(searchRequest);
+        //搜索匹配结果
+        SearchHits hits = searchResponse.getHits();
+        //搜索总记录数
+        long totalHits = hits.totalHits;
+        //匹配度较高的前N个文档 不是总记录数
+        SearchHit[] searchHits = hits.getHits();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (SearchHit hit : searchHits) {
+            //文档主键
+            String id = hit.getId();
+            //原文档内同
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            //由于前边设置了源文档的过滤，这时description是取不到的
+            String description = (String) sourceAsMap.get("description");
+            //学习模式
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            //价格
+            Double price = (Double) sourceAsMap.get("price");
+            //时间
+            Date date = dateFormat.parse((String) sourceAsMap.get("timestamp"));
+        }
+    }
+
+    //根据id精确查询
+    @Test
+    public void testIdsQuery() throws IOException, ParseException {
+        //搜索请求对象
+        SearchRequest searchRequest = new SearchRequest("xc_course");
+        //设置类型
+        searchRequest.types("doc");
+        //搜索源构建对象
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //搜索方式——搜索全部
+        //主键
+        String[] ids = new String[]{"1", "2"};
+        searchSourceBuilder.query(QueryBuilders.termsQuery("_id", ids));
+        //source源字段过滤
+        searchSourceBuilder.fetchSource(new String[] {"name", "studymodel", "price", "timestamp"}, new String[]{});
+        int page = 1;
+        int size = 1;
+        //计算记录起始下标
+        int from = (page - 1) * size;
+        searchSourceBuilder.from(from);
+        searchSourceBuilder.size(size);
+
+        //设置搜索源 装载搜索条件
+        searchRequest.source(searchSourceBuilder);
+        //执行搜索
+        SearchResponse searchResponse = client.search(searchRequest);
+        //搜索匹配结果
+        SearchHits hits = searchResponse.getHits();
+        //搜索总记录数
+        long totalHits = hits.totalHits;
+        //匹配度较高的前N个文档 不是总记录数
+        SearchHit[] searchHits = hits.getHits();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (SearchHit hit : searchHits) {
+            //文档主键
+            String id = hit.getId();
+            //原文档内同
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            //由于前边设置了源文档的过滤，这时description是取不到的
+            String description = (String) sourceAsMap.get("description");
+            //学习模式
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            //价格
+            Double price = (Double) sourceAsMap.get("price");
+            //时间
+            Date date = dateFormat.parse((String) sourceAsMap.get("timestamp"));
+        }
+    }
+
+
 }
