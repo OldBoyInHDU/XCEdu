@@ -280,7 +280,7 @@ public class CouseServiceImpl implements ICourseService {
         //时间戳,给logstach使用
         coursePubNew.setTimestamp(new Date());
         //发布时间
-        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = dateFormat.format(new Date());
         coursePubNew.setPubTime(date);
         coursePubRepository.save(coursePubNew);
